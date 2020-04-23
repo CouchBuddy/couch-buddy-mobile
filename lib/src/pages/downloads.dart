@@ -93,7 +93,7 @@ class _DownloadsState extends State<Downloads> {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: <Widget>[
-                        Text('Remaining: ${download.timeRemaining != null ? formatTime(download.timeRemaining) : 'Unknown'}'),
+                        Text('Remaining: ${download.timeRemaining != null ? formatTime(download.timeRemaining / 1000) : 'Unknown'}'),
                         Text('Peers: ${download.numPeers}'),
                       ],
                     )
