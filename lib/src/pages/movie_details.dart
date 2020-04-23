@@ -292,7 +292,7 @@ class MovieDetailsState extends State<MovieDetails> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: <Widget>[
                         Text(
-                          '${index + 1}. ${episode.title}',
+                          '${episode.episode}. ${episode.title}',
                           maxLines: 1,
                           overflow: TextOverflow.ellipsis,
                           style: Theme.of(context).textTheme.body2
