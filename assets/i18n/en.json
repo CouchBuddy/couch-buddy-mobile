@@ -1,0 +1,13 @@
+{
+  "home": [ "Home", "Homes" ],
+  "download": [ "Download", "Downloads" ],
+  "explore": [ "Explore", "Explore" ],
+  "info": [ "Info", "Info" ],
+  "movie": [ "Movie", "Movies" ],
+  "episode": [ "Episode", "Episodes" ],
+  "play": [ "Play", "Play" ],
+  "search": [ "Search", "Searches" ],
+  "season": [ "Season", "Seasons" ],
+  "series": [ "Series", "Series" ],
+  "setting": [ "Setting", "Settings" ]
+}
