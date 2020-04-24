@@ -9,6 +9,7 @@ import '../models/episode.dart';
 import '../models/movie.dart';
 import '../utils/localization.dart';
 import '../utils/routes.dart';
+import '../widgets/read_more.dart';
 
 class MovieDetails extends StatefulWidget {
   final Movie movie;
@@ -195,7 +196,7 @@ class MovieDetailsState extends State<MovieDetails> {
 
           Padding(
             padding: EdgeInsets.all(16.0),
-            child: Text(
+            child: ReadMore(
               movie.plot,
             ),
           ),
