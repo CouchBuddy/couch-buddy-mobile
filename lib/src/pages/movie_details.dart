@@ -7,6 +7,7 @@ import 'package:flutter_google_cast_button/bloc_media_route.dart';
 
 import '../models/episode.dart';
 import '../models/movie.dart';
+import '../resources/movies_api.dart';
 import '../utils/localization.dart';
 import '../utils/routes.dart';
 import '../widgets/read_more.dart';
@@ -238,8 +239,8 @@ class MovieDetailsState extends State<MovieDetails> {
           label: Text(torrent['quality']),
           color: Theme.of(context).accentColor,
           elevation: 8.0,
-          onPressed: () {
-            print(torrent);
+          onPressed: () async {
+            await MoviesApi.addDownload(torrent['magnetUrl']);
           },
         );
       }).toList(),

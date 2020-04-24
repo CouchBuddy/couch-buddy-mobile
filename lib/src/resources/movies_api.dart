@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'package:dio/dio.dart';
 
+import '../models/download.dart';
 import '../models/movie.dart';
 import '../models/movie_or_episode.dart';
 import '../models/shows_collection.dart';
@@ -81,6 +82,19 @@ class MoviesApi {
     } catch (e) {
       print(e);
       throw Exception('Failed to search movies');
+    }
+  }
+
+  static Future<Download> addDownload(String magnetUrl) async {
+    try {
+      final response = await client.post('/downloads', data: {
+        'magnetURI': magnetUrl
+      });
+
+      return Download.fromJson(response.data);
+    } catch (e) {
+      print(e);
+      throw Exception('Failed to add download');
     }
   }
 }
