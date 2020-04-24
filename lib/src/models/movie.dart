@@ -34,7 +34,11 @@ class Movie {
 
   @JsonKey(defaultValue: [])
   List<Episode> episodes = [];
+
   Movie movie;
+
+  @JsonKey(defaultValue: [])
+  List torrents = [];
 
   int id;
   DateTime createdAt;

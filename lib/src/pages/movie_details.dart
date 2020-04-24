@@ -219,9 +219,30 @@ class MovieDetailsState extends State<MovieDetails> {
             ),
           ) : Container(),
 
+          _buildDownloadOptions(movie),
+
           movie.isSeries ? _buildSeriesHeader(seasons) : Container()
         ],
       ),
+    );
+  }
+
+  Widget _buildDownloadOptions(Movie movie) {
+    if (movie.torrents == null) { return Container(); }
+
+    return ButtonBar(
+      alignment: MainAxisAlignment.spaceEvenly,
+      children: movie.torrents.map((torrent) {
+        return RaisedButton.icon(
+          icon: Icon(Icons.file_download),
+          label: Text(torrent['quality']),
+          color: Theme.of(context).accentColor,
+          elevation: 8.0,
+          onPressed: () {
+            print(torrent);
+          },
+        );
+      }).toList(),
     );
   }
 

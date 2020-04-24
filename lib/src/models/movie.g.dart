@@ -38,6 +38,7 @@ Movie _$MovieFromJson(Map<String, dynamic> json) {
     ..movie = json['movie'] == null
         ? null
         : Movie.fromJson(json['movie'] as Map<String, dynamic>)
+    ..torrents = json['torrents'] as List ?? []
     ..id = json['id'] as int
     ..createdAt = json['createdAt'] == null
         ? null
@@ -72,6 +73,7 @@ Map<String, dynamic> _$MovieToJson(Movie instance) => <String, dynamic>{
       'year': instance.year,
       'episodes': instance.episodes,
       'movie': instance.movie,
+      'torrents': instance.torrents,
       'id': instance.id,
       'createdAt': instance.createdAt?.toIso8601String(),
       'updatedAt': instance.updatedAt?.toIso8601String(),
