@@ -200,14 +200,23 @@ class MovieDetailsState extends State<MovieDetails> {
             ),
           ),
 
-          Padding(
+          movie.director != null ? Padding(
+            padding: EdgeInsets.symmetric(horizontal: 16.0),
+            child: Text(
+              'Directed by ${movie.director}',
+              overflow: TextOverflow.ellipsis,
+              style: Theme.of(context).textTheme.caption,
+            ),
+          ) : Container(),
+
+          movie.actors != null ? Padding(
             padding: EdgeInsets.symmetric(horizontal: 16.0),
             child: Text(
               'Cast: ${movie.actors}',
               overflow: TextOverflow.ellipsis,
               style: Theme.of(context).textTheme.caption,
             ),
-          ),
+          ) : Container(),
 
           movie.isSeries ? _buildSeriesHeader(seasons) : Container()
         ],
