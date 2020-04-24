@@ -10,6 +10,7 @@ Movie _$MovieFromJson(Map<String, dynamic> json) {
   return Movie()
     ..actors = json['actors'] as String
     ..awards = json['awards'] as String
+    ..background = json['background'] as String
     ..country = json['country'] as String
     ..director = json['director'] as String
     ..genre = json['genre'] as String
@@ -49,6 +50,7 @@ Movie _$MovieFromJson(Map<String, dynamic> json) {
 Map<String, dynamic> _$MovieToJson(Movie instance) => <String, dynamic>{
       'actors': instance.actors,
       'awards': instance.awards,
+      'background': instance.background,
       'country': instance.country,
       'director': instance.director,
       'genre': instance.genre,

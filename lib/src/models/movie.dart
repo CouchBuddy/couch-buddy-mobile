@@ -11,6 +11,7 @@ class Movie {
 
   String actors;
   String awards;
+  String background;
   String country;
   String director;
   String genre;

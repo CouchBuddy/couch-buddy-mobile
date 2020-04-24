@@ -125,11 +125,22 @@ class MovieDetailsState extends State<MovieDetails> {
                 ).createShader(Rect.fromLTRB(0, 0, rect.width, rect.height)),
               blendMode: BlendMode.darken,
               child: DecoratedBox(
-                decoration: BoxDecoration(
-                  image: DecorationImage(
-                    image: NetworkImage(movie.poster),
-                    fit: BoxFit.cover,
+                child: Center(
+                  child: SafeArea(
+                    child: Padding(
+                      padding: EdgeInsets.all(16.0),
+                      child: CachedNetworkImage(imageUrl: movie.poster),
+                    )
                   ),
+                ),
+                decoration: BoxDecoration(
+                  image: movie.background != null
+                    ? DecorationImage(
+                      image: CachedNetworkImageProvider(movie.background ?? movie.poster),
+                      fit: BoxFit.cover,
+                    )
+                    : null,
+                  color: Colors.grey
                 ),
               ),
             ),
