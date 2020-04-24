@@ -5,24 +5,21 @@ import 'package:flutter/services.dart';
 import 'package:flutter_google_cast_button/flutter_google_cast_button.dart';
 import 'package:flutter_google_cast_button/bloc_media_route.dart';
 
-import '../blocs/movies_bloc.dart';
 import '../models/episode.dart';
 import '../models/movie.dart';
 import '../utils/localization.dart';
 import '../utils/routes.dart';
-import '../widgets/stream_builder_enhanced.dart';
 
 class MovieDetails extends StatefulWidget {
-  final int movieId;
+  final Movie movie;
 
-  MovieDetails(this.movieId, { Key key }) : super(key: key);
+  MovieDetails(this.movie, { Key key }) : super(key: key);
 
   @override
   MovieDetailsState createState() => MovieDetailsState();
 }
 
 class MovieDetailsState extends State<MovieDetails> {
-  final MoviesBloc bloc = MoviesBloc();
   final MediaRouteBloc castBloc = MediaRouteBloc();
 
   int currentSeason = -1;
@@ -41,7 +38,6 @@ class MovieDetailsState extends State<MovieDetails> {
 
   @override
   void dispose() {
-    bloc.dispose();
     castBloc.close();
     super.dispose();
   }
@@ -74,15 +70,10 @@ class MovieDetailsState extends State<MovieDetails> {
 
   @override
   Widget build(BuildContext context) {
-    bloc.fetchOneMovie(widget.movieId);
+    final Movie movie = widget.movie != null
+      ? widget.movie
+      : ModalRoute.of(context).settings.arguments;
 
-    return StreamBuilderEnhanced(
-      stream: bloc.oneMovie,
-      builder: _buildPage
-    );
-  }
-
-  Widget _buildPage(Movie movie) {
     final nextEpisode = movie.episodes
       .lastWhere((e) => e.watched < 95, orElse: () => null);
 

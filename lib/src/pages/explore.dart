@@ -77,17 +77,16 @@ class ExploreState extends State<Explore> {
                   childAspectRatio: 2/3,
                   crossAxisCount: 3,
                   padding: EdgeInsets.symmetric(vertical: 16.0, horizontal: 8.0),
-                  children: snapshot.data.map((item) =>
+                  children: snapshot.data.map((movie) =>
                     Ink.image(
-                      image: NetworkImage(item.poster),
+                      image: NetworkImage(movie.poster),
                       fit: BoxFit.cover,
                       child: InkWell(
                         onTap: () {
-                          router.navigateTo(
+                          Navigator.pushNamed(
                             context,
-                            '${Routes.detail}/${item.id}',
-                            transition: TransitionType.inFromBottom,
-                            transitionDuration: const Duration(milliseconds: 200),
+                            Routes.explore,
+                            arguments: movie
                           );
                         },
                       ),

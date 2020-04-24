@@ -21,6 +21,7 @@ class CouchBuddy extends StatelessWidget {
         accentColor: Palette.netflixRed,
         textSelectionHandleColor: Palette.netflixRed
       ),
+      routes: routes,
       onGenerateRoute: router.generator,
       localizationsDelegates: [
         AppLocalizationsDelegate(context),

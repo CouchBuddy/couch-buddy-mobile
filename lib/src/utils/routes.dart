@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 
 import '../pages/home.dart';
 import '../pages/movie_details.dart';
+import '../pages/movie_details_from_id.dart';
 import '../pages/watch.dart';
 
 final homeRouteHandler = Handler(
@@ -13,7 +14,11 @@ final homeRouteHandler = Handler(
 
 final detailsRouteHandler = Handler(
   handlerFunc: (BuildContext context, Map<String, List<String>> params) {
-    return MovieDetails(int.parse(params['id'][0]));
+    if (params['id'] != null) {
+      return MovieDetailsFromId(int.parse(params['id'][0]));
+    } else {
+      return MovieDetails(null);
+    }
   },
 );
 
@@ -35,6 +40,7 @@ final videoRouteHandler = Handler(
 class Routes {
   static String home = '/';
   static String detail = '/detail';
+  static String explore = '/explore';
   static String filter = '/filter';
   static String video = '/watch';
 
@@ -56,3 +62,7 @@ class Routes {
 }
 
 final router = Router();
+
+final Map<String, Widget Function(BuildContext)> routes = {
+  Routes.explore: (context) => MovieDetails(null),
+};
