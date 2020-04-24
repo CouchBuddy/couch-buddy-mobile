@@ -31,6 +31,7 @@ class Movie {
   String writer;
   int year;
 
+  @JsonKey(defaultValue: [])
   List<Episode> episodes = [];
   Movie movie;
 

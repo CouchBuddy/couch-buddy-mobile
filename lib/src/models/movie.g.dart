@@ -30,9 +30,10 @@ Movie _$MovieFromJson(Map<String, dynamic> json) {
     ..writer = json['writer'] as String
     ..year = json['year'] as int
     ..episodes = (json['episodes'] as List)
-        ?.map((e) =>
-            e == null ? null : Episode.fromJson(e as Map<String, dynamic>))
-        ?.toList()
+            ?.map((e) =>
+                e == null ? null : Episode.fromJson(e as Map<String, dynamic>))
+            ?.toList() ??
+        []
     ..movie = json['movie'] == null
         ? null
         : Movie.fromJson(json['movie'] as Map<String, dynamic>)
