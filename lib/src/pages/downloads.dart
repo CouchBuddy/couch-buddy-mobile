@@ -56,10 +56,15 @@ class _DownloadsState extends State<Downloads> {
   }
 
   Widget _buildDownloadCard(Download download) {
-    String title = download.info != null ? download.info.title : download.name;
+    String title;
 
-    title += download.info != null ? ' S${download.info.season}' : '';
-    title += download.info != null ? ' E${download.info.episode}' : '';
+    if (download.info != null) {
+      title = download.info.title;
+      title += download.info.season != null ? ' S${download.info.season}' : '';
+      title += download.info.episode != null ? ' E${download.info.episode}' : '';
+    } else {
+      title = download.name;
+    }
 
     return Card(
       color: Colors.black,
