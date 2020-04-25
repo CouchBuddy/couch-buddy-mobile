@@ -5,6 +5,7 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import './src/pages/tabs_layout.dart';
 import './src/utils/localization.dart';
 import './src/utils/routes.dart';
+import './src/utils/preferences.dart';
 import './src/utils/theme/color.dart';
 
 class CouchBuddy extends StatelessWidget {
@@ -32,7 +33,10 @@ class CouchBuddy extends StatelessWidget {
         const Locale('en', ''),
         const Locale('es', ''),
       ],
-      home: TabsLayout(),
+      home: FutureBuilder(
+        future: preferences.init(),
+        builder: (context, snapshot) => TabsLayout()
+      ),
     );
   }
 }

@@ -7,6 +7,7 @@ import 'home.dart';
 import 'search.dart';
 import 'explore.dart';
 import 'downloads.dart';
+import 'settings.dart';
 import '../utils/localization.dart';
 
 class TabsLayout extends StatefulWidget {
@@ -65,7 +66,7 @@ class TabsLayoutState extends State<TabsLayout> with SingleTickerProviderStateMi
           Search(),
           Explore(),
           Downloads(),
-          Home(),
+          Settings(),
         ],
       ),
       floatingActionButton: CastButtonWidget(

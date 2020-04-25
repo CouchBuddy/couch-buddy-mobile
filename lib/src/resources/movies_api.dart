@@ -5,15 +5,15 @@ import '../models/download.dart';
 import '../models/movie.dart';
 import '../models/movie_or_episode.dart';
 import '../models/shows_collection.dart';
+import '../utils/preferences.dart';
 
 Dio client = Dio(
   BaseOptions(
-    baseUrl: 'http://192.168.1.2:3000/api'
+    baseUrl: '${preferences.serverUrl}/api'
   )
 );
 
 class MoviesApi {
-
   static Future<List<ShowsCollection>> fetchMoviesCollections() async {
     final collections = [
       [ 'Continue Watching', 'continue-watching' ],
