@@ -44,9 +44,9 @@ class MovieDetailsState extends State<MovieDetails> {
     super.dispose();
   }
 
-  void _playOrCast(String url) {
+  void _playOrCast(MediaInfo mediaInfo) {
     if (isCastConnected) {
-      FlutterGoogleCastButton.loadMedia(url);
+      FlutterGoogleCastButton.loadMedia(mediaInfo);
     } else {
       SystemChrome.setPreferredOrientations([
         DeviceOrientation.landscapeRight,
@@ -54,7 +54,7 @@ class MovieDetailsState extends State<MovieDetails> {
       ]).then((e) {
         router.navigateTo(
           context,
-          '${Routes.video}/${Uri.encodeComponent(url)}',
+          '${Routes.video}/${Uri.encodeComponent(mediaInfo.url)}',
           transition: TransitionType.inFromBottom,
           transitionDuration: const Duration(milliseconds: 200),
         );
@@ -63,11 +63,24 @@ class MovieDetailsState extends State<MovieDetails> {
   }
 
   void _playOrCastMovie(Movie movie) {
-    _playOrCast('http://192.168.1.2:3000/api/watch/m${movie.id}');
+    MediaInfo mediaInfo = MediaInfo(MediaMetadataType.MOVIE)
+      ..url = 'http://192.168.1.2:3000/api/watch/m${movie.id}'
+      ..title = movie.title
+      ..images = [ Uri.parse(movie.poster) ];
+
+    _playOrCast(mediaInfo);
   }
 
   void _playOrCastEpisode(Episode episode) {
-    _playOrCast('http://192.168.1.2:3000/api/watch/e${episode.id}');
+    MediaInfo mediaInfo = MediaInfo(MediaMetadataType.TV_SHOW)
+      ..url = 'http://192.168.1.2:3000/api/watch/e${episode.id}'
+      ..title = episode.title
+      ..seriesTitle = episode.movie.title
+      ..images = [ Uri.parse(episode.poster) ]
+      ..season = episode.season
+      ..episode = episode.episode;
+
+    _playOrCast(mediaInfo);
   }
 
   @override
