@@ -7,8 +7,10 @@ import 'package:flutter_google_cast_button/bloc_media_route.dart';
 
 import '../models/episode.dart';
 import '../models/movie.dart';
+import '../models/subtitle.dart';
 import '../resources/movies_api.dart';
 import '../utils/localization.dart';
+import '../utils/preferences.dart';
 import '../utils/routes.dart';
 import '../widgets/read_more.dart';
 
@@ -44,7 +46,16 @@ class MovieDetailsState extends State<MovieDetails> {
     super.dispose();
   }
 
-  void _playOrCast(MediaInfo mediaInfo) {
+  void _playOrCast(String watchId, MediaInfo mediaInfo) async {
+    final List<Subtitle> subs = await MoviesApi.fetchSubtitles(watchId);
+
+    mediaInfo.subtitles = subs.map((subs) => TextTrack()
+      ..id = subs.id
+      ..name = '${subs.lang} Subtitles'
+      ..lang = subs.lang
+      ..url = Uri.parse('${preferences.serverUrl}/api/subtitles/${subs.id}')
+    ).toList();
+
     if (isCastConnected) {
       FlutterGoogleCastButton.loadMedia(mediaInfo);
     } else {
@@ -54,7 +65,7 @@ class MovieDetailsState extends State<MovieDetails> {
       ]).then((e) {
         router.navigateTo(
           context,
-          '${Routes.video}/${Uri.encodeComponent(mediaInfo.url)}',
+          '${Routes.video}/${Uri.encodeComponent(mediaInfo.url.toString())}',
           transition: TransitionType.inFromBottom,
           transitionDuration: const Duration(milliseconds: 200),
         );
@@ -64,23 +75,23 @@ class MovieDetailsState extends State<MovieDetails> {
 
   void _playOrCastMovie(Movie movie) {
     MediaInfo mediaInfo = MediaInfo(MediaMetadataType.MOVIE)
-      ..url = 'http://192.168.1.2:3000/api/watch/m${movie.id}'
+      ..url = Uri.parse('${preferences.serverUrl}/api/watch/m${movie.id}')
       ..title = movie.title
       ..images = [ Uri.parse(movie.poster) ];
 
-    _playOrCast(mediaInfo);
+    _playOrCast('m${movie.id}', mediaInfo);
   }
 
   void _playOrCastEpisode(Episode episode) {
     MediaInfo mediaInfo = MediaInfo(MediaMetadataType.TV_SHOW)
-      ..url = 'http://192.168.1.2:3000/api/watch/e${episode.id}'
+      ..url = Uri.parse('${preferences.serverUrl}/api/watch/e${episode.id}')
       ..title = episode.title
       ..seriesTitle = episode.movie.title
       ..images = [ Uri.parse(episode.poster) ]
       ..season = episode.season
       ..episode = episode.episode;
 
-    _playOrCast(mediaInfo);
+    _playOrCast('e${episode.id}', mediaInfo);
   }
 
   @override

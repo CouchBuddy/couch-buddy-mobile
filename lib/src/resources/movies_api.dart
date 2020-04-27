@@ -5,6 +5,7 @@ import '../models/download.dart';
 import '../models/movie.dart';
 import '../models/movie_or_episode.dart';
 import '../models/shows_collection.dart';
+import '../models/subtitle.dart';
 import '../utils/preferences.dart';
 
 Dio client = Dio(
@@ -67,6 +68,19 @@ class MoviesApi {
     } catch (e) {
       print(e);
       throw Exception('Failed to search movies');
+    }
+  }
+
+  static Future<List<Subtitle>> fetchSubtitles(String watchId) async {
+    try {
+      final response = await client.get('/watch/$watchId/subtitles');
+
+      return List.from(response.data)
+        .map((subtitle) => Subtitle.fromJson(subtitle))
+        .toList();
+    } catch (e) {
+      print(e);
+      throw Exception('Failed to fetch subtitles');
     }
   }
 
