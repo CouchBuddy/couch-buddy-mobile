@@ -25,7 +25,9 @@ class ShowsList extends StatelessWidget {
           child: AspectRatio(
             aspectRatio: 2/3,
             child: CachedNetworkImage(
-              imageUrl: show.isMovie ? show.movie.poster : show.episode.movie.poster,
+              imageUrl: show.isMovie
+                ? show.movie.poster
+                : (show.episode.movie != null) ? show.episode.movie.poster : show.episode.poster,
               fit: BoxFit.cover,
               errorWidget: (context, url, error) => Container(color: Colors.grey)
             )
