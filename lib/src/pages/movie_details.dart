@@ -1,9 +1,9 @@
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:chromecast_api/chromecast_api.dart';
+import 'package:chromecast_api/bloc_media_route.dart';
 import 'package:fluro/fluro.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_google_cast_button/flutter_google_cast_button.dart';
-import 'package:flutter_google_cast_button/bloc_media_route.dart';
 
 import '../models/episode.dart';
 import '../models/movie.dart';
@@ -33,6 +33,8 @@ class MovieDetailsState extends State<MovieDetails> {
 
   @override
   void initState() {
+    isCastConnected = castBloc.initialState is Connected;
+
     castBloc.listen((state) {
       setState(() => isCastConnected = state is Connected);
     });
@@ -57,7 +59,7 @@ class MovieDetailsState extends State<MovieDetails> {
     ).toList();
 
     if (isCastConnected) {
-      FlutterGoogleCastButton.loadMedia(mediaInfo);
+      ChromecastApi.loadMedia(mediaInfo);
     } else {
       SystemChrome.setPreferredOrientations([
         DeviceOrientation.landscapeRight,

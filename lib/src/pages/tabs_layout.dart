@@ -1,7 +1,7 @@
+import 'package:chromecast_api/bloc_media_route.dart';
+import 'package:chromecast_api/cast_button_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_google_cast_button/bloc_media_route.dart';
-import 'package:flutter_google_cast_button/cast_button_widget.dart';
 
 import 'home.dart';
 import 'search.dart';
@@ -9,6 +9,7 @@ import 'explore.dart';
 import 'downloads.dart';
 import 'settings.dart';
 import '../utils/localization.dart';
+import '../widgets/cast_controller.dart';
 
 class TabsLayout extends StatefulWidget {
   TabsLayout({Key key}) : super(key: key);
@@ -42,21 +43,27 @@ class TabsLayoutState extends State<TabsLayout> with SingleTickerProviderStateMi
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.black,
-      bottomNavigationBar: TabBar(
-        labelStyle: TextStyle(fontSize: 10.0),
-        indicator: BoxDecoration(
-          border: Border(
-            top: BorderSide(color: Theme.of(context).accentColor, width: 3.0)
-          )
-        ),
-        controller: controller,
-        tabs: <Widget>[
-          Tab(text: _('home'), icon: Icon(Icons.weekend)),
-          Tab(text: _('search'), icon: Icon(Icons.search)),
-          Tab(text: _('explore'), icon: Icon(Icons.explore)),
-          Tab(text: _('download', 2), icon: Icon(Icons.file_download)),
-          Tab(text: _('setting', 2), icon: Icon(Icons.settings)),
-        ],
+      bottomNavigationBar: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          CastController(),
+          TabBar(
+            labelStyle: TextStyle(fontSize: 10.0),
+            indicator: BoxDecoration(
+              border: Border(
+                top: BorderSide(color: Theme.of(context).accentColor, width: 3.0)
+              )
+            ),
+            controller: controller,
+            tabs: <Widget>[
+              Tab(text: _('home'), icon: Icon(Icons.weekend)),
+              Tab(text: _('search'), icon: Icon(Icons.search)),
+              Tab(text: _('explore'), icon: Icon(Icons.explore)),
+              Tab(text: _('download', 2), icon: Icon(Icons.file_download)),
+              Tab(text: _('setting', 2), icon: Icon(Icons.settings)),
+            ],
+          ),
+        ]
       ),
       body: TabBarView(
         controller: controller,
