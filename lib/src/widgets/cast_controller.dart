@@ -14,7 +14,9 @@ class CastController extends StatefulWidget {
 class _CastControllerState extends State<CastController> {
   StreamSubscription _castStateSubscription;
   StreamSubscription _mediaStateSubscription;
+
   MediaInfo _currentMedia;
+  PlayerState _playerState;
 
   @override
   void initState() {
@@ -26,9 +28,11 @@ class _CastControllerState extends State<CastController> {
 
     _mediaStateSubscription = ChromecastApi.mediaEventStream.listen((mediaEvent) {
       setState(() {
-        _currentMedia = mediaEvent != null
-          ? MediaInfo.fromMap(Map<String, dynamic>.from(mediaEvent))
+        _currentMedia = mediaEvent['mediaInfo'] != null
+          ? MediaInfo.fromMap(Map<String, dynamic>.from(mediaEvent['mediaInfo']))
           : null;
+
+        _playerState = PlayerState.values[mediaEvent['playerState'] as int];
       });
     });
     super.initState();
@@ -116,10 +120,10 @@ class _CastControllerState extends State<CastController> {
           ButtonBar(
             children: <Widget>[
               IconButton(
-                icon: Icon(Icons.play_arrow),
-                onPressed: () {
-                  ChromecastApi.playOrPause();
-                }
+                icon: Icon(_playerState == PlayerState.PLAYING ? Icons.pause : Icons.play_arrow),
+                onPressed: _playerState == PlayerState.PLAYING || _playerState == PlayerState.PAUSED
+                  ? ChromecastApi.playOrPause
+                  : null
               ),
 
               IconButton(
