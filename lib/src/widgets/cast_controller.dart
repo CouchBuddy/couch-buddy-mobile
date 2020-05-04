@@ -48,13 +48,12 @@ class _CastControllerState extends State<CastController> {
 
   void _showSubtitlesDialog() async {
     final int selectedSubtitlesId = await showDialog<int>(
-    context: context,
-    builder: (BuildContext context) {
-      return _buildDialog();
-    });
+      context: context,
+      builder: (BuildContext context) => _buildDialog()
+    );
 
-    if (selectedSubtitlesId != null && selectedSubtitlesId > 0) {
-      _activateSubtitles(selectedSubtitlesId);
+    if (selectedSubtitlesId != null) {
+      _activateSubtitles(selectedSubtitlesId > 0 ? selectedSubtitlesId : null);
     }
   }
 
@@ -135,15 +134,27 @@ class _CastControllerState extends State<CastController> {
   }
 
   Widget _buildDialog() {
+    if (_currentMedia == null) { return Container(); }
+
     return SimpleDialog(
       title: const Text('Subtitles'),
       children: _currentMedia.subtitles.map((subs) => SimpleDialogOption(
         onPressed: () => Navigator.pop(context, subs.id),
         child: ListTile(
-          leading: subs.active ? Icon(Icons.check) : Container(width: 1,),
           title: Text(subs.name ?? subs.lang),
+          trailing: subs.active ? Icon(Icons.check) : Container(width: 1,),
+          dense: true,
+          selected: subs.active,
         ),
       )).toList()
+      ..add(SimpleDialogOption(
+        onPressed: () => Navigator.pop(context, -1),
+        child: ListTile(
+          dense: true,
+          trailing: Icon(Icons.not_interested),
+          title: Text('No Subtitles')
+        )
+      ))
     );
   }
 }
