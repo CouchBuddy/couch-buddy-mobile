@@ -14,10 +14,10 @@ dependencies:
 
   bloc: ^3.0.0
   cached_network_image: ^2.1.0+1
+  chromecast_api:
+    git: git://github.com/Couch-Buddy/chromecast-api.git
   dio: ^3.0.9
   fluro: ^1.6.3
-  flutter_google_cast_button:
-    git: git://github.com/lucafaggianelli/flutter_google_cast_button.git
   intl: ^0.16.0
   json_annotation: ^3.0.1
   rxdart: ^0.23.1
