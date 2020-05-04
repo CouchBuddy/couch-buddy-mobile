@@ -10,6 +10,7 @@ Subtitle _$SubtitleFromJson(Map<String, dynamic> json) {
   return Subtitle()
     ..fileName = json['fileName'] as String
     ..lang = json['lang'] as String
+    ..langName = json['langName'] as String
     ..mediaId = json['mediaId'] as int
     ..mediaType = json['mediaType'] as String
     ..id = json['id'] as int
@@ -24,6 +25,7 @@ Subtitle _$SubtitleFromJson(Map<String, dynamic> json) {
 Map<String, dynamic> _$SubtitleToJson(Subtitle instance) => <String, dynamic>{
       'fileName': instance.fileName,
       'lang': instance.lang,
+      'langName': instance.langName,
       'mediaId': instance.mediaId,
       'mediaType': instance.mediaType,
       'id': instance.id,

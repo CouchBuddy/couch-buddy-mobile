@@ -55,7 +55,7 @@ class MovieDetailsState extends State<MovieDetails> {
 
     mediaInfo.subtitles = subs.map((subs) => TextTrack()
       ..id = subs.id
-      ..name = '${subs.lang} Subtitles'
+      ..name = subs.langName ?? subs.lang
       ..lang = subs.lang
       ..url = Uri.parse('${preferences.serverUrl}/api/subtitles/${subs.id}')
     ).toList();

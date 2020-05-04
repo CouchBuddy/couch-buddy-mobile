@@ -9,6 +9,7 @@ class Subtitle {
 
   String fileName;
   String lang;
+  String langName;
   int mediaId;
   String mediaType;
 
