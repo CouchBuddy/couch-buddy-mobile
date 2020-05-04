@@ -140,7 +140,7 @@ class _CastControllerState extends State<CastController> {
       children: _currentMedia.subtitles.map((subs) => SimpleDialogOption(
         onPressed: () => Navigator.pop(context, subs.id),
         child: ListTile(
-          leading: Icon(Icons.check),
+          leading: subs.active ? Icon(Icons.check) : Container(width: 1,),
           title: Text(subs.name ?? subs.lang),
         ),
       )).toList()
