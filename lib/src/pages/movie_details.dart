@@ -1,6 +1,7 @@
+import 'dart:async';
+
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:chromecast_api/chromecast_api.dart';
-import 'package:chromecast_api/bloc_media_route.dart';
 import 'package:fluro/fluro.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -24,7 +25,7 @@ class MovieDetails extends StatefulWidget {
 }
 
 class MovieDetailsState extends State<MovieDetails> {
-  final MediaRouteBloc castBloc = MediaRouteBloc();
+  StreamSubscription _castStateSubscription;
 
   int currentSeason = -1;
   bool isCastConnected = false;
@@ -33,19 +34,20 @@ class MovieDetailsState extends State<MovieDetails> {
 
   @override
   void initState() {
-    isCastConnected = castBloc.initialState is Connected;
-
-    castBloc.listen((state) {
-      setState(() => isCastConnected = state is Connected);
-    });
-
+    _castStateSubscription = ChromecastApi.castEventStream.listen(onCastStateChange);
     super.initState();
   }
 
   @override
   void dispose() {
-    castBloc.close();
+    _castStateSubscription.cancel();
     super.dispose();
+  }
+
+  void onCastStateChange(event) {
+    if (mounted) {
+      setState(() => isCastConnected = event == 4);
+    }
   }
 
   void _playOrCast(String watchId, MediaInfo mediaInfo) async {

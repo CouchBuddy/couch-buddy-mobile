@@ -18,18 +18,20 @@ class _CastControllerState extends State<CastController> {
 
   @override
   void initState() {
-    super.initState();
-    _castStateSubscription = ChromecastApi.castEventStream().listen((event) {
-      print('Cast: $event');
-
-      if (event == 4) {
-        print('connected, now listen to media events');
-        _mediaStateSubscription = ChromecastApi.mediaEventStream().listen((mediaEvent) {
-          print('Media: $mediaEvent');
-          setState(() { _currentMedia = mediaEvent; });
-        });
+    _castStateSubscription = ChromecastApi.castEventStream.listen((event) {
+      if (event != 4) {
+        setState(() { _currentMedia = null; });
       }
     });
+
+    _mediaStateSubscription = ChromecastApi.mediaEventStream.listen((mediaEvent) {
+      setState(() {
+        _currentMedia = mediaEvent != null
+          ? MediaInfo.fromMap(Map<String, dynamic>.from(mediaEvent))
+          : null;
+      });
+    });
+    super.initState();
   }
 
   @override
@@ -41,17 +43,19 @@ class _CastControllerState extends State<CastController> {
   }
 
   void _activateSubtitles(int id) {
-    print(id);
+    ChromecastApi.activateSubtitles(id);
   }
 
-  void _showDialog() async {
+  void _showSubtitlesDialog() async {
     final int selectedSubtitlesId = await showDialog<int>(
     context: context,
     builder: (BuildContext context) {
       return _buildDialog();
     });
 
-    _activateSubtitles(selectedSubtitlesId);
+    if (selectedSubtitlesId != null && selectedSubtitlesId > 0) {
+      _activateSubtitles(selectedSubtitlesId);
+    }
   }
 
   @override
@@ -81,14 +85,14 @@ class _CastControllerState extends State<CastController> {
             child: _currentMedia.images.length > 0
             ? CachedNetworkImage(
                 imageUrl: _currentMedia.images[0].toString(),
-                width: 48,
-                height: 48,
+                width: 64,
+                height: 64,
                 fit: BoxFit.cover,
               )
             : Container(
                 color: Colors.grey,
-                width: 48,
-                height: 48,
+                width: 64,
+                height: 64,
               ),
           ),
           Expanded(
@@ -100,11 +104,13 @@ class _CastControllerState extends State<CastController> {
                   textAlign: TextAlign.start,
                   style: Theme.of(context).textTheme.bodyText1,
                 ),
-                Text(
+                subtitle != null
+                ? Text(
                   subtitle,
                   textAlign: TextAlign.start,
                   style: Theme.of(context).textTheme.caption,
-                ),
+                )
+                : Container(),
               ],
             ),
           ),
@@ -113,13 +119,13 @@ class _CastControllerState extends State<CastController> {
               IconButton(
                 icon: Icon(Icons.play_arrow),
                 onPressed: () {
-                  // ChromecastApi.playPause();
+                  ChromecastApi.playOrPause();
                 }
               ),
 
               IconButton(
                 icon: Icon(Icons.closed_caption),
-                onPressed: () => _showDialog()
+                onPressed: () => _showSubtitlesDialog()
               )
             ],
           ),
@@ -135,7 +141,7 @@ class _CastControllerState extends State<CastController> {
         onPressed: () => Navigator.pop(context, subs.id),
         child: ListTile(
           leading: Icon(Icons.check),
-          title: Text(subs.name),
+          title: Text(subs.name ?? subs.lang),
         ),
       )).toList()
     );
