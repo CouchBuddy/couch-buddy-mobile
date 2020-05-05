@@ -1,3 +1,4 @@
+import 'package:couch_buddy/src/resources/discovery.dart';
 import 'package:flutter/material.dart';
 
 import '../utils/preferences.dart';
@@ -9,8 +10,12 @@ class Settings extends StatefulWidget {
   _SettingsState createState() => _SettingsState();
 }
 
+const kDiscoveryRetrials = 5;
+
 class _SettingsState extends State<Settings> {
   final _formKey = GlobalKey<FormState>();
+
+  bool searchingServer = false;
 
   @override
   void initState() {
@@ -20,6 +25,24 @@ class _SettingsState extends State<Settings> {
   @override
   void dispose() {
     super.dispose();
+  }
+
+  void startDiscovery() async {
+    try {
+      setState(() { searchingServer = true; });
+
+      for (int i = 0; i < kDiscoveryRetrials; i++) {
+        final server = await Discovery.start();
+
+        if (server != null) {
+          preferences.serverUrl = server.toString();
+          return;
+        }
+      }
+    } catch (e) {
+    } finally {
+      setState(() { searchingServer = false; });
+    }
   }
 
   @override
@@ -39,7 +62,19 @@ class _SettingsState extends State<Settings> {
               keyboardType: TextInputType.url,
               decoration: InputDecoration(
                 labelText: 'Server address',
-                hintText: 'http://192.168.1.2'
+                hintText: 'http://192.168.1.2:3000',
+                suffixIcon: !searchingServer
+                ? IconButton(
+                    icon: Icon(Icons.network_check),
+                    onPressed: () => startDiscovery(),
+                    tooltip: 'Search server',
+                  )
+                : Container(
+                    padding: EdgeInsets.all(12.0),
+                    height: 24.0,
+                    width: 24.0,
+                    child: CircularProgressIndicator(strokeWidth: 2.0)
+                  ),
               ),
               validator: (value) {
                 if (value.isEmpty) {
